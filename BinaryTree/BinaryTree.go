@@ -225,10 +225,10 @@ func (tree *BinaryTree) findRootIndex2(inorder []int, target int) (index int) {
 }
 
 /**
-* 二叉树的序列化与反序列化
+ * 二叉树的序列化与反序列化
  */
 // Serializes a tree to a single string.
-func (this *BinaryTree) serialize(root *Node) string {
+func (tree *BinaryTree) serialize(root *Node) string {
 	sb := &strings.Builder{}
 	var dfs func(*Node)
 	dfs = func(node *Node) {
@@ -246,7 +246,7 @@ func (this *BinaryTree) serialize(root *Node) string {
 }
 
 // Deserializes your encoded data to tree.
-func (this *BinaryTree) deserialize(data string) *Node {
+func (tree *BinaryTree) deserialize(data string) *Node {
 	sp := strings.Split(data, ",")
 	var build func() *Node
 	build = func() *Node {
@@ -262,4 +262,53 @@ func (this *BinaryTree) deserialize(data string) *Node {
 			right: build()}
 	}
 	return build()
+}
+
+/**
+ *  树的子结构
+ */
+//用于递归遍历 A 中的所有节点，并判断当前节点 A 是否与 B 的根节点相同，相同则调用 helper( ) 进一步校验
+func (tree *BinaryTree) isSubStructure(A *Node, B *Node) bool {
+	if A == nil && B == nil {
+		return true
+	}
+	if A == nil || B == nil {
+		return false
+	}
+
+	var ret bool
+
+	//当在 A 中找到 B 的根节点时，进入helper递归校验
+	if A.data == B.data {
+		ret = tree.helper(A, B)
+	}
+
+	//ret == false，说明 B 的根节点不在当前 A 树顶中，进入 A 的左子树进行递归查找
+	if !ret {
+		ret = tree.isSubStructure(A.left, B)
+	}
+
+	//当 B 的根节点不在当前 A 树顶和左子树中，进入 A 的右子树进行递归查找
+	if !ret {
+		ret = tree.isSubStructure(A.right, B)
+	}
+	return ret
+
+	//利用 || 的短路特性可写成
+	//return helper(A,B) || isSubStructure(A.Left,B) || isSubStructure(A.Right,B)
+}
+
+//helper 校验 B 是否与 A 的一个子树拥有相同的结构和节点值
+func (tree *BinaryTree) helper(a, b *Node) bool {
+	if b == nil {
+		return true
+	}
+	if a == nil {
+		return false
+	}
+	if a.data != b.data {
+		return false
+	}
+	//a.data == b.data 递归校验 A B 左子树和右子树的结构和节点是否相同
+	return tree.helper(a.left, b.left) && tree.helper(a.right, b.right)
 }
