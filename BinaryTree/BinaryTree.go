@@ -298,7 +298,7 @@ func (tree *BinaryTree) isSubStructure(A *Node, B *Node) bool {
 	//return helper(A,B) || isSubStructure(A.Left,B) || isSubStructure(A.Right,B)
 }
 
-//helper 校验 B 是否与 A 的一个子树拥有相同的结构和节点值
+// helper 校验 B 是否与 A 的一个子树拥有相同的结构和节点值
 func (tree *BinaryTree) helper(a, b *Node) bool {
 	if b == nil {
 		return true
@@ -311,4 +311,26 @@ func (tree *BinaryTree) helper(a, b *Node) bool {
 	}
 	//a.data == b.data 递归校验 A B 左子树和右子树的结构和节点是否相同
 	return tree.helper(a.left, b.left) && tree.helper(a.right, b.right)
+}
+
+/**
+ *  对称二叉树
+ */
+func isSymmetric(root *Node) bool {
+
+	var defs func(left *Node, right *Node) bool
+	defs = func(left *Node, right *Node) bool {
+		if left == nil && right == nil {
+			return true
+		}
+		if left == nil || right == nil {
+			return false
+		}
+		if left.data != right.data {
+			return false
+		}
+		return defs(left.left, right.right) && defs(left.right, right.left) // 如果左右都对称就返回true
+	}
+
+	return defs(root.left, root.right)
 }
