@@ -259,7 +259,8 @@ func (tree *BinaryTree) deserialize(data string) *Node {
 		return &Node{
 			data:  val,
 			left:  build(),
-			right: build()}
+			right: build(),
+		}
 	}
 	return build()
 }
