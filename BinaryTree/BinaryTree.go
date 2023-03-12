@@ -335,3 +335,20 @@ func isSymmetric(root *Node) bool {
 
 	return defs(root.left, root.right)
 }
+
+/* InvertTree func is for inverting the binary tree */
+func InvertTree(root *Node) *Node {
+	if root == nil {
+		return nil
+	}
+
+	// Recursively invert the left and right subtrees
+	left := InvertTree(root.left)
+	right := InvertTree(root.right)
+
+	// Swap the left and right subtrees
+	root.left = right
+	root.right = left
+
+	return root
+}
